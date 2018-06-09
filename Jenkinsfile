@@ -3,13 +3,18 @@ pipeline {
     stages{
         stage('Build'){
             steps {
-                sh '/home/dbose/apache-maven-3.5.3/bin/mvn clean package'
+                sh 'mvn clean package'
             }
             post {
                 success {
                     echo 'Now Archiving...'
                     archiveArtifacts artifacts: '**/target/*.war'
                 }
+            }
+        }
+        stage ('Deploy to Staging'){
+            steps {
+                build job: 'Deploy-to-staging'
             }
         }
     }
